@@ -6,7 +6,7 @@ import re
 
 from google_api_manager import *
 
-class MessageDataList(list):
+class MessageDataDictList(list):
 
     def __init__(self,parent=None):
         # super(RowDataList, self).__init__(parent)
@@ -22,13 +22,18 @@ class MessageDataList(list):
         print "now getting messages..."
         messages = self.service.users().messages().list(userId="me",maxResults=10,q="from:urikake2@misumi.co.jp has:attachment").execute()["messages"]
         for i in range( len(messages) ):
-            message_data = MessageData( messages[i], self.service )
-            self.append(message_data)
+            message_data_dict = MessageDataDict( messages[i], self.service )
+            self.append(message_data_dict)
 
-class MessageData():
+class MessageDataDict(dict):
 
     def __init__(self, message, service, parent=None):
-        print "MessageData init"
+        dict.__init__(self)
+        print "MessageDataDict init"
+
+        for key in ["orderdate","duedate","price"]:
+            self[key] = None
+
         self.__service = service
         self.id = message["id"]
         self.payload = self.__service.users().messages().get(userId="me",id=self.id).execute()["payload"]
@@ -61,15 +66,20 @@ class MessageData():
     def get_bill_data(self):
         return self.get_attachment_data("御請求書")
         
-    def get_order_data(self):
-        print "get_order_data()"
+    def set_values(self):
+        print "set_values()"
+        order_data_dict = dict()
+        
         self.create_estimate()                
         os.system("pdftotext -upw 160398 " + self.estimate_path().encode("utf-8"))# textファイルへ変換        
         file_text = open(self.estimate_path().replace(".pdf",".txt")).read()# listへ変換
+
         date_list = re.split("\D",re.findall("発行日.*\n",file_text)[0])
         while "" in date_list: date_list.remove("")
-        price = re.findall("[,0-9]+\n",file_text)[4].replace("\n","")
-        return [date_list,price]
+        self["orderdate"] = reduce(lambda x,y: x + "/" + y,date_list)# from estimate
+        self["duedate"] = reduce(lambda x,y: x + "/" + y,date_list)# from invoice
+        
+        self["price"] = re.findall("[,0-9]+\n",file_text)[4].replace("\n","")
 
     def estimate_path(self):
         if self.__estimate_path is None:

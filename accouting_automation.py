@@ -18,7 +18,7 @@ except ImportError:
 def main():
     app = QtGui.QApplication(sys.argv)
     QtCore.QTextCodec.setCodecForCStrings( QtCore.QTextCodec.codecForLocale() )# for japanese
-    ui = GUI()
+    ui = MainWindow()
     ui.show()
     sys.exit(app.exec_())
 

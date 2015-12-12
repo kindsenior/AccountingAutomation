@@ -35,7 +35,7 @@ class SpreadsheetManager():
         self.sheets = self.spreadsheet_client.get_worksheets(self.file_id)
         # sheet = sheets.entry[0]
 
-    def send_order_data(self,invoice_date_list,bill_date_list,price):
+    def send_order_data(self,message_data_dict):
         print "send_order_data()"
         print "now getting list feed"
         list_feed = self.spreadsheet_client.get_list_feed( self.file_id, self.sheets.entry[0].get_worksheet_id() )
@@ -44,14 +44,18 @@ class SpreadsheetManager():
 
         print "now getting cell entry"
         cell_entry = self.spreadsheet_client.get_cell(self.file_id, self.sheets.entry[0].get_worksheet_id(), row_idx, 1)
-        cell_entry.cell.input_value = reduce(lambda x,y: x + "/" + y,invoice_date_list)
+        cell_entry.cell.input_value = message_data_dict["orderdate"]
         print "now updating cell entry"
-        self.spreadsheet_client.update( cell_entry ) 
+        self.spreadsheet_client.update( cell_entry )
 
         cell_entry = self.spreadsheet_client.get_cell(self.file_id, self.sheets.entry[0].get_worksheet_id(), row_idx, 2)
-        cell_entry.cell.input_value = reduce(lambda x,y: x + "/" + y,bill_date_list)
-        self.spreadsheet_client.update( cell_entry ) 
+        cell_entry.cell.input_value = message_data_dict["duedate"]
+        self.spreadsheet_client.update( cell_entry )
 
         cell_entry = self.spreadsheet_client.get_cell(self.file_id, self.sheets.entry[0].get_worksheet_id(), row_idx, 5)
-        cell_entry.cell.input_value = price
+        cell_entry.cell.input_value = message_data_dict["price"]
+        self.spreadsheet_client.update( cell_entry )
+
+        cell_entry = self.spreadsheet_client.get_cell(self.file_id, self.sheets.entry[0].get_worksheet_id(), row_idx, 7)
+        cell_entry.cell.input_value = message_data_dict["budget"]
         self.spreadsheet_client.update( cell_entry )
