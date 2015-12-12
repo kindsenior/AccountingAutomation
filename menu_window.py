@@ -29,13 +29,15 @@ class MainWindow(QtGui.QWidget):
         # self.layout.addWidget(self.radio)
 
         self.check_boxes = []
-        
-        for message_data in self.message_data_dict_list:
+
+        for i in range(len(self.message_data_dict_list)):
+            message_data_dict = self.message_data_dict_list[i]
+        # for message_data_dict in self.message_data_dict_list:
             hlayout = QtGui.QHBoxLayout()
             self.layout.addLayout(hlayout)
 
             # チェックボックス
-            check = QtGui.QCheckBox(message_data.receiver.decode("utf-8") + " " + message_data.receive_date)
+            check = QtGui.QCheckBox(message_data_dict.receiver.decode("utf-8") + " " + message_data_dict.receive_date)
             hlayout.addWidget(check)
             self.check_boxes.append(check)
 
@@ -43,10 +45,10 @@ class MainWindow(QtGui.QWidget):
             # line_edit = QtGui.QLineEdit(row_data.receiver)
             # hlayout.addWidget(line_edit)
 
-            # 最後にOKボタン
+            # 見積書閲覧ボタン
             estimate_sheet_button = QtGui.QPushButton('View Estimate')
             hlayout.addWidget(estimate_sheet_button)
-            estimate_sheet_button.clicked.connect(self.open_estimate)
+            estimate_sheet_button.clicked.connect(lambda : self.open_estimate(i))
             
             # row_data.get_estimate()
 
@@ -71,9 +73,10 @@ class MainWindow(QtGui.QWidget):
         # UI要素にシグナルを追加
         self.setSignals()
 
-    def open_estimate(self):
+    def open_estimate(self,i):
+    # def open_estimate(self,message_data_dict):
         print("GUI.openPdf()")
-        self.message_data_dict_list[0].open_estimate()
+        self.message_data_dict_list[i].open_estimate()
         
     #----------------------------------------
     ## UI要素にシグナルを追加
