@@ -4,6 +4,7 @@
 import os
 import sys
 import base64
+import functools
  
 from PySide import QtCore, QtGui
 
@@ -29,10 +30,7 @@ class MainWindow(QtGui.QWidget):
         # self.layout.addWidget(self.radio)
 
         self.check_boxes = []
-
-        for i in range(len(self.message_data_dict_list)):
-            message_data_dict = self.message_data_dict_list[i]
-        # for message_data_dict in self.message_data_dict_list:
+        for message_data_dict in self.message_data_dict_list:
             hlayout = QtGui.QHBoxLayout()
             self.layout.addLayout(hlayout)
 
@@ -47,8 +45,8 @@ class MainWindow(QtGui.QWidget):
 
             # 見積書閲覧ボタン
             estimate_sheet_button = QtGui.QPushButton('View Estimate')
+            estimate_sheet_button.clicked.connect( functools.partial(message_data_dict.open_estimate) )
             hlayout.addWidget(estimate_sheet_button)
-            estimate_sheet_button.clicked.connect(lambda : self.open_estimate(i))
             
             # row_data.get_estimate()
 
@@ -73,11 +71,6 @@ class MainWindow(QtGui.QWidget):
         # UI要素にシグナルを追加
         self.setSignals()
 
-    def open_estimate(self,i):
-    # def open_estimate(self,message_data_dict):
-        print("GUI.openPdf()")
-        self.message_data_dict_list[i].open_estimate()
-        
     #----------------------------------------
     ## UI要素にシグナルを追加
     def setSignals(self):
