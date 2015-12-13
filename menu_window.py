@@ -84,7 +84,7 @@ class MainWindow(QtGui.QWidget):
                 self.message_data_dict_list[i].set_values()
                 self.order_data_input_window = ProcessAccountingWindow( self.message_data_dict_list[i] )
                 self.order_data_input_window.closeEvent = lambda event: self.order_data_input_window_close_cb(i)
-                self.order_data_input_window.show()
+                self.order_data_input_window.exec_()# wait for sub window to close
 
     def order_data_input_window_close_cb(self, check_box_idx):
         print "order_data_input_window_close_cb()"
@@ -126,8 +126,8 @@ class MainWindow(QtGui.QWidget):
         print ' getValue '.center(80, '*')
 
 
-class ProcessAccountingWindow(QtGui.QWidget):
-  
+class ProcessAccountingWindow(QtGui.QDialog):
+
     def __init__(self, message_data_dict, parent=None):
         super(ProcessAccountingWindow, self).__init__(parent)
 
