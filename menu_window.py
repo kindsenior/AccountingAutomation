@@ -19,7 +19,7 @@ class MainWindow(QtGui.QWidget):
         super(MainWindow, self).__init__(parent)
 
         self.spreadsheet_manager = SpreadsheetManager()
-        self.message_data_dict_list = MessageDataDictList(self.spreadsheet_manager.keys)
+        self.message_data_dict_list = MessageDataDictList(self.spreadsheet_manager.key_index_dict.keys())
 
         # 空の縦レイアウトを作る
         self.layout = QtGui.QVBoxLayout()
@@ -90,18 +90,15 @@ class MainWindow(QtGui.QWidget):
     def order_data_input_window_send_data_button_cb(self, check_box_idx):
         print "order_data_input_window_send_data_button_cb(" + str(check_box_idx) + ")"
 
-        line_edit_dict = self.order_data_input_window.line_edit_dict
-        # print line_edit_dict["orderdate"].text() + " " + line_edit_dict["duedate"].text()
         message_data_dict = self.message_data_dict_list[check_box_idx]
-        message_data_dict["orderdate"] = line_edit_dict["orderdate"].text()
-        message_data_dict["duedate"] = line_edit_dict["duedate"].text()
-        message_data_dict["price"] = line_edit_dict["price"].text()
-
-        message_data_dict["budget"] = self.order_data_input_window.combo.currentText()
+        for key,form in self.order_data_input_window.form_dict.iteritems():
+            if type(form) == QtGui.QLineEdit:
+                message_data_dict[key] = form.text()
+            elif type(form) == QtGui.QComboBox:
+                message_data_dict[key] = form.currentText()
 
         self.spreadsheet_manager.send_order_data(message_data_dict)
         self.order_data_input_window.close()
-
             
     #----------------------------------------
     ## UI要素のステータスやら値やらプリントする
