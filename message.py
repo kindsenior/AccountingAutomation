@@ -40,7 +40,7 @@ class MessageDataDict(dict):
         self.payload = self.__service.users().messages().get(userId="me",id=self.id).execute()["payload"]
         self.attachment_parts = filter(lambda x: x["filename"] != "", self.payload["parts"])# 添付ファイルのあるpartのみ抽出 2-4番目をとるのでもいいかも
 
-        self.receiver = base64.urlsafe_b64decode(self.payload["parts"][0]["body"]["data"].encode("ASCII")).split("\n")[1]
+        self.receiver = base64.urlsafe_b64decode(self.payload["parts"][0]["body"]["data"].encode("ASCII")).split("\n")[1][0:-4]
         self.receive_date = filter(lambda x: x["name"] == "Date", self.payload["headers"])[0]["value"]# 受信日
 
         self.__estimate = None
@@ -79,7 +79,7 @@ class MessageDataDict(dict):
         while "" in date_list: date_list.remove("")
         self["orderdate"] = reduce(lambda x,y: x + "/" + y,date_list)# from estimate
         self["duedate"] = reduce(lambda x,y: x + "/" + y,date_list)# from invoice
-        
+        self["person"]  = self.receiver
         self["price"] = re.findall("[,0-9]+\n",file_text)[4].replace("\n","")
 
     def estimate_path(self):
