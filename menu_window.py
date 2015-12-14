@@ -19,7 +19,7 @@ class MainWindow(QtGui.QWidget):
         super(MainWindow, self).__init__(parent)
 
         self.spreadsheet_manager = SpreadsheetManager()
-        self.message_data_dict_list = MessageDataDictList()
+        self.message_data_dict_list = MessageDataDictList(self.spreadsheet_manager.keys)
 
         # 空の縦レイアウトを作る
         self.layout = QtGui.QVBoxLayout()

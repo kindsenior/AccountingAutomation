@@ -8,7 +8,7 @@ from google_api_manager import *
 
 class MessageDataDictList(list):
 
-    def __init__(self,parent=None):
+    def __init__(self,keys,parent=None):
         # super(RowDataList, self).__init__(parent)
         list.__init__(self)
         print "MessageDataList init"
@@ -22,16 +22,17 @@ class MessageDataDictList(list):
         print "now getting messages..."
         messages = self.service.users().messages().list(userId="me",maxResults=10,q="from:urikake2@misumi.co.jp has:attachment").execute()["messages"]
         for i in range( len(messages) ):
-            message_data_dict = MessageDataDict( messages[i], self.service )
+            message_data_dict = MessageDataDict( messages[i], self.service,keys )
             self.append(message_data_dict)
 
 class MessageDataDict(dict):
 
-    def __init__(self, message, service, parent=None):
+    def __init__(self, message, service, keys, parent=None):
         dict.__init__(self)
         print "MessageDataDict init"
 
-        for key in ["orderdate","duedate","price"]:
+        for key in keys:
+        # for key in ["orderdate","duedate","price"]:
             self[key] = None
 
         self.__service = service
