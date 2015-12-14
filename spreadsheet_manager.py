@@ -33,29 +33,34 @@ class SpreadsheetManager():
 
         print "now getting sheets..."
         self.sheets = self.spreadsheet_client.get_worksheets(self.file_id)
-        # sheet = sheets.entry[0]
+        self.order_list_sheet = self.sheets.entry[0]
+        print "now getting list feed..."
+        list_feed = self.spreadsheet_client.get_list_feed( self.file_id, self.order_list_sheet.get_worksheet_id() )
+        self.keys = []
+        for key in list_feed.entry[0].to_dict().keys():
+            self.keys.append(key)
 
     def send_order_data(self,message_data_dict):
         print "send_order_data()"
         print "now getting list feed"
-        list_feed = self.spreadsheet_client.get_list_feed( self.file_id, self.sheets.entry[0].get_worksheet_id() )
+        list_feed = self.spreadsheet_client.get_list_feed( self.file_id, self.order_list_sheet.get_worksheet_id() )
 
         row_idx = 1+1+len(list_feed.entry)
 
         print "now getting cell entry"
-        cell_entry = self.spreadsheet_client.get_cell(self.file_id, self.sheets.entry[0].get_worksheet_id(), row_idx, 1)
+        cell_entry = self.spreadsheet_client.get_cell(self.file_id, self.order_list_sheet.get_worksheet_id(), row_idx, 1)
         cell_entry.cell.input_value = message_data_dict["orderdate"]
         print "now updating cell entry"
         self.spreadsheet_client.update( cell_entry )
 
-        cell_entry = self.spreadsheet_client.get_cell(self.file_id, self.sheets.entry[0].get_worksheet_id(), row_idx, 2)
+        cell_entry = self.spreadsheet_client.get_cell(self.file_id, self.order_list_sheet.get_worksheet_id(), row_idx, 2)
         cell_entry.cell.input_value = message_data_dict["duedate"]
         self.spreadsheet_client.update( cell_entry )
 
-        cell_entry = self.spreadsheet_client.get_cell(self.file_id, self.sheets.entry[0].get_worksheet_id(), row_idx, 5)
+        cell_entry = self.spreadsheet_client.get_cell(self.file_id, self.order_list_sheet.get_worksheet_id(), row_idx, 5)
         cell_entry.cell.input_value = message_data_dict["price"]
         self.spreadsheet_client.update( cell_entry )
 
-        cell_entry = self.spreadsheet_client.get_cell(self.file_id, self.sheets.entry[0].get_worksheet_id(), row_idx, 7)
+        cell_entry = self.spreadsheet_client.get_cell(self.file_id, self.order_list_sheet.get_worksheet_id(), row_idx, 7)
         cell_entry.cell.input_value = message_data_dict["budget"]
         self.spreadsheet_client.update( cell_entry )
