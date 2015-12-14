@@ -133,7 +133,8 @@ class ProcessAccountingWindow(QtGui.QDialog):
         self.message_data_dict = message_data_dict
         
         # 空の縦レイアウトを作る
-        self.layout = QtGui.QVBoxLayout()
+        # self.layout = QtGui.QVBoxLayout()
+        self.layout = QtGui.QGridLayout()
         self.setLayout(self.layout)
         
         # # ラジオボタン
@@ -151,21 +152,42 @@ class ProcessAccountingWindow(QtGui.QDialog):
 
         # ラインエディット
 
-        self.line_edit_dict = {}
+        self.form_dict = {}
         
-        self.line_edit_dict["orderdate"] = QtGui.QLineEdit(self.message_data_dict["orderdate"])
-        self.layout.addWidget(self.line_edit_dict["orderdate"])
+        self.layout.addWidget(QtGui.QLabel("person:"),0,0)
+        self.form_dict["person"] = QtGui.QLineEdit(self.message_data_dict["person"])
+        self.layout.addWidget(self.form_dict["person"],0,1)
 
-        self.line_edit_dict["duedate"] = QtGui.QLineEdit(self.message_data_dict["duedate"])
-        self.layout.addWidget(self.line_edit_dict["duedate"])
+        self.layout.addWidget(QtGui.QLabel("orderdate:"),1,0)
+        self.form_dict["orderdate"] = QtGui.QLineEdit(self.message_data_dict["orderdate"])
+        self.layout.addWidget(self.form_dict["orderdate"],1,1)
 
-        self.line_edit_dict["price"] = QtGui.QLineEdit(self.message_data_dict["price"])
-        self.layout.addWidget(self.line_edit_dict["price"])
+        self.layout.addWidget(QtGui.QLabel("duedate:"),2,0)
+        self.form_dict["duedate"] = QtGui.QLineEdit(self.message_data_dict["duedate"])
+        self.layout.addWidget(self.form_dict["duedate"],2,1)
+
+        self.layout.addWidget(QtGui.QLabel("price:"),3,0)
+        self.form_dict["price"] = QtGui.QLineEdit(self.message_data_dict["price"])
+        self.layout.addWidget(self.form_dict["price"],3,1)
         
+        self.layout.addWidget(QtGui.QLabel("company:"),4,0)
+        self.form_dict["company"] = QtGui.QLineEdit("株式会社 ミスミ")
+        self.layout.addWidget(self.form_dict["company"],4,1)
+
+        self.layout.addWidget(QtGui.QLabel("merchandise:"),5,0)
+        self.form_dict["merchandise"] = QtGui.QLineEdit("品名")
+        self.layout.addWidget(self.form_dict["merchandise"],5,1)
+
         # コンボボックス
-        self.combo = QtGui.QComboBox()
-        self.combo.addItems(['A', 'B', 'C'])
-        self.layout.addWidget(self.combo)
+        self.layout.addWidget(QtGui.QLabel("robot:"),6,0)
+        self.form_dict["robot"] = QtGui.QComboBox()
+        self.form_dict["robot"].addItems(["JAXON","HRP2"])
+        self.layout.addWidget(self.form_dict["robot"],6,1)
+
+        self.layout.addWidget(QtGui.QLabel("budget:"),7,0)
+        self.form_dict["budget"] = QtGui.QComboBox()
+        self.form_dict["budget"].addItems(['D-NEDO', 'N-NEDO', 'C'])
+        self.layout.addWidget(self.form_dict["budget"],7,1)
 
         # Sendボタン
         self.send_order_data_button = QtGui.QPushButton('Send to Spreadsheet')
