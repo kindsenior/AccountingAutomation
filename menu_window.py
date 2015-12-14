@@ -185,11 +185,6 @@ class ProcessAccountingWindow(QtGui.QDialog):
         # self.listWidget.addItems(['itemA', 'itemB', 'itemC'])
         # self.layout.addWidget(self.listWidget)
 
-    def update_data_and_close_window(self):
-        # self.order_data_dict["orderdate"] = self.orderdate_line_edit.text()
-        # self.order_data_dict["duedate"] = self.duedate_line_edit.text()
-        self.close()
-         
 #------------------------------------------------------------------------------ 
 ## GUIの起動
 def main():
