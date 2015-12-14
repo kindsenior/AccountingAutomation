@@ -64,3 +64,7 @@ class SpreadsheetManager():
         cell_entry = self.spreadsheet_client.get_cell(self.file_id, self.order_list_sheet.get_worksheet_id(), row_idx, 7)
         cell_entry.cell.input_value = message_data_dict["budget"]
         self.spreadsheet_client.update( cell_entry )
+
+if __name__ == "__main__":
+    global spreadsheet_manager
+    spreadsheet_manager = SpreadsheetManager()

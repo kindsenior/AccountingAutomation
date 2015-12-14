@@ -193,9 +193,10 @@ class ProcessAccountingWindow(QtGui.QDialog):
 def main():
     app = QtGui.QApplication(sys.argv)
     QtCore.QTextCodec.setCodecForCStrings( QtCore.QTextCodec.codecForLocale() )# for japanese
+    global ui
     ui = MainWindow()
-    ui.show()
-    sys.exit(app.exec_())
+    # ui.show()
+    # sys.exit(app.exec_())
  
 if __name__ == '__main__':
     main()
