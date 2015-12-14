@@ -83,11 +83,12 @@ class MainWindow(QtGui.QWidget):
                 # print order_data_dict["orderdate"] + "price:" + order_data_dict["price"]
                 self.message_data_dict_list[i].set_values()
                 self.order_data_input_window = ProcessAccountingWindow( self.message_data_dict_list[i] )
-                self.order_data_input_window.closeEvent = lambda event: self.order_data_input_window_close_cb(i)
+                # self.order_data_input_window.closeEvent = lambda event: self.order_data_input_window_close_cb(i)
+                self.order_data_input_window.send_order_data_button.clicked.connect( functools.partial(self.order_data_input_window_send_data_button_cb,i) )
                 self.order_data_input_window.exec_()# wait for sub window to close
 
-    def order_data_input_window_close_cb(self, check_box_idx):
-        print "order_data_input_window_close_cb()"
+    def order_data_input_window_send_data_button_cb(self, check_box_idx):
+        print "order_data_input_window_send_data_button_cb(" + str(check_box_idx) + ")"
 
         line_edit_dict = self.order_data_input_window.line_edit_dict
         # print line_edit_dict["orderdate"].text() + " " + line_edit_dict["duedate"].text()
@@ -99,6 +100,7 @@ class MainWindow(QtGui.QWidget):
         message_data_dict["budget"] = self.order_data_input_window.combo.currentText()
 
         self.spreadsheet_manager.send_order_data(message_data_dict)
+        self.order_data_input_window.close()
 
             
     #----------------------------------------
@@ -168,11 +170,14 @@ class ProcessAccountingWindow(QtGui.QDialog):
         self.combo.addItems(['A', 'B', 'C'])
         self.layout.addWidget(self.combo)
 
-        # OKボタン
+        # Sendボタン
         self.send_order_data_button = QtGui.QPushButton('Send to Spreadsheet')
-        self.layout.addWidget(self.send_order_data_button)
-        self.send_order_data_button.clicked.connect(self.close)
-        # row_data.get_estimate()
+        self.layout.addWidget(self.send_order_data_button,8,0)
+
+        # cancelボタン
+        cancel_button = QtGui.QPushButton('Cancel')
+        self.layout.addWidget(cancel_button,8,1)
+        cancel_button.clicked.connect(self.close)
 
         # # スピンボックス
         # self.spin = QtGui.QSpinBox()
