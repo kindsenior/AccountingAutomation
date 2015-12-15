@@ -16,7 +16,8 @@ except ImportError:
     flags = None
 
 # SCOPES = 'https://www.googleapis.com/auth/gmail.readonly'
-SCOPES = 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/gmail.readonly'
+# SCOPES = 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/gmail.readonly'
+SCOPES = 'https://www.googleapis.com/auth/drive https://mail.google.com/'
 # SCOPES = 'https://www.googleapis.com/auth/drive'
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'Accouting Automation'
