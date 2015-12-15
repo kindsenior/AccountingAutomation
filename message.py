@@ -37,11 +37,13 @@ class MessageDataDict(dict):
 
         self.__service = service
         self.id = message["id"]
+        self.thread_id = message["threadId"]
         self.payload = self.__service.users().messages().get(userId="me",id=self.id).execute()["payload"]
         self.attachment_parts = filter(lambda x: x["filename"] != "", self.payload["parts"])# 添付ファイルのあるpartのみ抽出 2-4番目をとるのでもいいかも
 
         self.receiver = base64.urlsafe_b64decode(self.payload["parts"][0]["body"]["data"].encode("ASCII")).split("\n")[1][0:-4]
         self.receive_date = filter(lambda x: x["name"] == "Date", self.payload["headers"])[0]["value"]# 受信日
+        self.message_id = filter(lambda x: x["name"] == "Message-ID" ,self.payload["headers"])[0]["value"]# message-id
 
         self.__attachments = [None,None,None]
         self.__attachment_paths = [None,None,None]
