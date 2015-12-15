@@ -10,6 +10,7 @@ from PySide import QtCore, QtGui
 
 from spreadsheet_manager import *
 from message import *
+import mail
 
 #------------------------------------------------------------------------------
 ## MainWindowを作るクラス
@@ -89,6 +90,11 @@ class MainWindow(QtGui.QWidget):
                 self.order_data_input_window.send_order_data_button.clicked.connect( functools.partial(self.order_data_input_window_send_data_button_cb,i) )
                 self.order_data_input_window.exec_()# wait for sub window to close
 
+                # メール送信ウィンドウ
+                self.send_mail_window = SendMailWindow( self.message_data_dict_list[i] )
+                self.send_mail_window.send_mail_button.clicked.connect( functools.partial(self.send_mail_window_send_mail_button_cb,self.message_data_dict_list[i]) )
+                self.send_mail_window.exec_()
+
     def order_data_input_window_send_data_button_cb(self, check_box_idx):
         print "order_data_input_window_send_data_button_cb(" + str(check_box_idx) + ")"
 
@@ -101,7 +107,18 @@ class MainWindow(QtGui.QWidget):
 
         self.spreadsheet_manager.send_order_data(message_data_dict)
         self.order_data_input_window.close()
-            
+
+    def send_mail_window_send_mail_button_cb(self, message_data_dict):
+        body = mail.create_body( message = self.send_mail_window.message_line_edit.text(),
+                                 subject = u'（株）ミスミより請求書発行のご案内',
+                                 sender = self.send_mail_window.account_line_edit.text() + "@jsk.imi.i.u-tokyo.ac.jp",
+                                 receiver = 'order-misumi@jsk.t.u-tokyo.ac.jp',
+                                 encoding = 'utf-8',
+                                 thread_id = message_data_dict.thread_id,
+                                 in_reply_to = message_data_dict.message_id )
+        self.message_data_dict_list.service.users().messages().send(userId="me",body=body).execute()
+        self.send_mail_window.close()
+
     #----------------------------------------
     ## UI要素のステータスやら値やらプリントする
     def getValue(self):
@@ -211,6 +228,34 @@ class OrderDataInputWindow(QtGui.QDialog):
 
 #------------------------------------------------------------------------------ 
 ## GUIの起動
+
+class SendMailWindow(QtGui.QDialog):
+    def __init__(self, message_data_dict, parent=None):
+        super(SendMailWindow, self).__init__(parent)
+
+        self.message_data_dict = message_data_dict
+
+        layout = QtGui.QGridLayout()
+        self.setLayout(layout)
+
+        layout.addWidget(QtGui.QLabel("imi account:"),0,0)
+        self.account_line_edit = QtGui.QLineEdit("")
+        layout.addWidget(self.account_line_edit,0,1)
+        layout.addWidget(QtGui.QLabel("@jsk.imi.i.u-tokyo.ac.jp"),0,2)
+
+        layout.addWidget(QtGui.QLabel("Message:"),1,0)
+        self.message_line_edit = QtGui.QLineEdit(self.message_data_dict.receiver + "分,処理しました")
+        layout.addWidget(self.message_line_edit,1,1,1,2)
+
+        # Sendボタン
+        self.send_mail_button = QtGui.QPushButton('Send Mail')
+        layout.addWidget(self.send_mail_button,2,0,1,2)
+
+        # cancelボタン
+        cancel_button = QtGui.QPushButton("Don't Send")
+        layout.addWidget(cancel_button,2,2)
+        cancel_button.clicked.connect(self.close)
+
 def main():
     app = QtGui.QApplication(sys.argv)
     QtCore.QTextCodec.setCodecForCStrings( QtCore.QTextCodec.codecForLocale() )# for japanese
