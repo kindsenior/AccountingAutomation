@@ -9,6 +9,12 @@ import oauth2client
 from oauth2client import client
 from oauth2client import tools
 
+try:
+    import argparse
+    flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
+except ImportError:
+    flags = None
+
 # SCOPES = 'https://www.googleapis.com/auth/gmail.readonly'
 SCOPES = 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/gmail.readonly'
 # SCOPES = 'https://www.googleapis.com/auth/drive'

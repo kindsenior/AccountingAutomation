@@ -9,12 +9,6 @@ from apiclient import errors
 
 from menu_window import *
 
-try:
-    import argparse
-    flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
-except ImportError:
-    flags = None
-
 def main():
     app = QtGui.QApplication(sys.argv)
     QtCore.QTextCodec.setCodecForCStrings( QtCore.QTextCodec.codecForLocale() )# for japanese
