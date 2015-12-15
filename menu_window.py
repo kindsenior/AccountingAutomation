@@ -82,7 +82,9 @@ class MainWindow(QtGui.QWidget):
                 # order_data_dict = self.message_data_dict_list[i].get_order_data()
                 # print order_data_dict["orderdate"] + "price:" + order_data_dict["price"]
                 self.message_data_dict_list[i].set_values()
-                self.order_data_input_window = ProcessAccountingWindow( self.message_data_dict_list[i] )
+
+                # 注文データ入力ウィンドウ
+                self.order_data_input_window = OrderDataInputWindow( self.message_data_dict_list[i] )
                 # self.order_data_input_window.closeEvent = lambda event: self.order_data_input_window_close_cb(i)
                 self.order_data_input_window.send_order_data_button.clicked.connect( functools.partial(self.order_data_input_window_send_data_button_cb,i) )
                 self.order_data_input_window.exec_()# wait for sub window to close
@@ -125,10 +127,10 @@ class MainWindow(QtGui.QWidget):
         print ' getValue '.center(80, '*')
 
 
-class ProcessAccountingWindow(QtGui.QDialog):
+class OrderDataInputWindow(QtGui.QDialog):
 
     def __init__(self, message_data_dict, parent=None):
-        super(ProcessAccountingWindow, self).__init__(parent)
+        super(OrderDataInputWindow, self).__init__(parent)
 
         self.message_data_dict = message_data_dict
         
