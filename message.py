@@ -32,7 +32,6 @@ class MessageDataDict(dict):
         print "MessageDataDict init"
 
         for key in keys:
-        # for key in ["orderdate","duedate","price"]:
             self[key] = None
 
         self.__service = service
