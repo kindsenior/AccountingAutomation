@@ -95,6 +95,11 @@ class MainWindow(QtGui.QWidget):
                 self.send_mail_window.send_mail_button.clicked.connect( functools.partial(self.send_mail_window_send_mail_button_cb,self.message_data_dict_list[i]) )
                 self.send_mail_window.exec_()
 
+                # 印刷ウィンドウ
+                self.print_window = PrintWindow()
+                self.print_window.print_button.clicked.connect( functools.partial(self.message_data_dict_list[i].print_attachments) )
+                self.print_window.exec_()
+
     def order_data_input_window_send_data_button_cb(self, check_box_idx):
         print "order_data_input_window_send_data_button_cb(" + str(check_box_idx) + ")"
 
@@ -152,7 +157,6 @@ class OrderDataInputWindow(QtGui.QDialog):
         self.message_data_dict = message_data_dict
         
         # 空の縦レイアウトを作る
-        # self.layout = QtGui.QVBoxLayout()
         self.layout = QtGui.QGridLayout()
         self.setLayout(self.layout)
         
@@ -254,6 +258,21 @@ class SendMailWindow(QtGui.QDialog):
         # cancelボタン
         cancel_button = QtGui.QPushButton("Don't Send")
         layout.addWidget(cancel_button,2,2)
+        cancel_button.clicked.connect(self.close)
+
+class PrintWindow(QtGui.QDialog):
+    def __init__(self, parent=None):
+        super(PrintWindow, self).__init__(parent)
+
+        layout = QtGui.QHBoxLayout()
+        self.setLayout(layout)
+
+        self.print_button = QtGui.QPushButton("Print Attachments")
+        layout.addWidget(self.print_button)
+        self.print_button.clicked.connect(self.close)
+
+        cancel_button = QtGui.QPushButton("Don't Print")
+        layout.addWidget(cancel_button)
         cancel_button.clicked.connect(self.close)
 
 def main():

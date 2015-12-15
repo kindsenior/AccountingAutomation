@@ -53,22 +53,22 @@ class MessageDataDict(dict):
         if self.__attachments[idx] is None:
             for attachment_part in self.attachment_parts:
                 if attachment_part["filename"].encode("utf-8") == basename + ".pdf":
-                    return self.__service.users().messages().attachments().get(userId="me",messageId=self.id,id=attachment_part["body"]["attachmentId"]).execute()["data"]
-            return false
+                    self.__attachments[idx] = self.__service.users().messages().attachments().get(userId="me",messageId=self.id,id=attachment_part["body"]["attachmentId"]).execute()["data"].encode("utf-8")
+                    break
         return self.__attachments[idx]
 
     def estimate_data(self):
         return self.attachment_data("御見積書",0)
         
     def invoice_data(self):
-        return self.attachment_data("納品書",2)
+        return self.attachment_data("納品書",1)
 
     def bill_data(self):
-        return self.attachment_data("御請求書",1)
+        return self.attachment_data("御請求書",2)
 
     def attachment_date(self,create_func,path_func,):
         create_func()
-        os.system("pdftotext -upw 160398 " + path_func().encode("utf-8"))# textファイルへ変換
+        os.system("pdftotext -upw 160398 " + path_func())# textファイルへ変換
         file_text = open(path_func().replace(".pdf",".txt")).read()
         date_list = re.split("\D",re.findall("発行日.*\n",file_text)[0])
         while "" in date_list: date_list.remove("")
@@ -92,18 +92,21 @@ class MessageDataDict(dict):
 
     def attachment_path(self,idx):
         if self.__attachment_paths[idx] is None:
-            self.__attachment_paths[idx] = os.path.join("/tmp", self.id + self.attachment_parts[idx]["filename"])
+            self.__attachment_paths[idx] = os.path.join("/tmp", self.id + self.attachment_parts[idx]["filename"]).encode("utf-8")
         return self.__attachment_paths[idx]
 
     def estimate_path(self):
         return self.attachment_path(0)
 
     def invoice_path(self):
+        return self.attachment_path(1)
+
+    def bill_path(self):
         return self.attachment_path(2)
 
     def create_attachment(self,path_func,data_func):
         if not os.path.exists(path_func()):
-            file_data = base64.urlsafe_b64decode(data_func().encode('UTF-8'))
+            file_data = base64.urlsafe_b64decode(data_func())
             f = open(path_func(), 'w')
             f.write(file_data)
             f.close()
@@ -114,8 +117,19 @@ class MessageDataDict(dict):
     def create_invoice(self):
         self.create_attachment(self.invoice_path,self.invoice_data)
 
-    def open_estimate(self):
-        estimate_path = self.estimate_path()
-        self.create_estimate()
-        os.system("gnome-open " + estimate_path.encode("utf-8"))
+    def create_bill(self):
+        self.create_attachment(self.bill_path,self.bill_data)
 
+    def print_pdf(self,pdfname):
+        basename = os.path.splitext(pdfname)[0]
+        os.system("pdftoppm -upw 160398 " + pdfname + " " + basename)
+        os.system("lp " + basename + "-1.ppm -o page-left=-20")
+
+    def print_attachments(self):
+        for create_func,path_func in [ (self.create_estimate,self.estimate_path), (self.create_invoice,self.invoice_path), (self.create_bill,self.bill_path) ]:
+            create_func()
+            self.print_pdf(path_func())
+
+    def open_estimate(self):
+        self.create_estimate()
+        os.system("gnome-open " + self.estimate_path())
