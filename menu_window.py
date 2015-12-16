@@ -38,7 +38,7 @@ class MainWindow(QtGui.QWidget):
             self.layout.addLayout(hlayout)
 
             # チェックボックス
-            check = QtGui.QCheckBox(message_data_dict.receiver.decode("utf-8") + " " + message_data_dict.receive_date)
+            check = QtGui.QCheckBox(message_data_dict.receiver + " " + message_data_dict.receive_date)
             hlayout.addWidget(check)
             self.check_boxes.append(check)
 
