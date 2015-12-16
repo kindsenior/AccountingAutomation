@@ -174,8 +174,6 @@ class OrderDataInputWindow(QtGui.QDialog):
     def __init__(self, message_data_dict, selection_list_dict, parent=None):
         super(OrderDataInputWindow, self).__init__(parent)
 
-        self.message_data_dict = message_data_dict
-        
         # 空の縦レイアウトを作る
         self.layout = QtGui.QGridLayout()
         self.setLayout(self.layout)
@@ -197,7 +195,7 @@ class OrderDataInputWindow(QtGui.QDialog):
 
         self.form_dict = {}
 
-        person_data = self.message_data_dict["person"]
+        person_data = message_data_dict["person"]
         person_list = selection_list_dict["person"]
         if not person_data in person_list: person_list.append(person_data)
         self.layout.addWidget(QtGui.QLabel("person:"),0,0)
@@ -207,15 +205,15 @@ class OrderDataInputWindow(QtGui.QDialog):
         self.layout.addWidget(self.form_dict["person"],0,1)
 
         self.layout.addWidget(QtGui.QLabel("orderdate:"),1,0)
-        self.form_dict["orderdate"] = QtGui.QLineEdit(self.message_data_dict["orderdate"])
+        self.form_dict["orderdate"] = QtGui.QLineEdit(message_data_dict["orderdate"])
         self.layout.addWidget(self.form_dict["orderdate"],1,1)
 
         self.layout.addWidget(QtGui.QLabel("duedate:"),2,0)
-        self.form_dict["duedate"] = QtGui.QLineEdit(self.message_data_dict["duedate"])
+        self.form_dict["duedate"] = QtGui.QLineEdit(message_data_dict["duedate"])
         self.layout.addWidget(self.form_dict["duedate"],2,1)
 
         self.layout.addWidget(QtGui.QLabel("price:"),3,0)
-        self.form_dict["price"] = QtGui.QLineEdit(self.message_data_dict["price"])
+        self.form_dict["price"] = QtGui.QLineEdit(message_data_dict["price"])
         self.layout.addWidget(self.form_dict["price"],3,1)
         
         self.layout.addWidget(QtGui.QLabel("company:"),4,0)
@@ -266,8 +264,6 @@ class SendMailWindow(QtGui.QDialog):
     def __init__(self, message_data_dict, parent=None):
         super(SendMailWindow, self).__init__(parent)
 
-        self.message_data_dict = message_data_dict
-
         layout = QtGui.QGridLayout()
         self.setLayout(layout)
 
@@ -277,7 +273,7 @@ class SendMailWindow(QtGui.QDialog):
         layout.addWidget(QtGui.QLabel("@jsk.imi.i.u-tokyo.ac.jp"),0,2)
 
         layout.addWidget(QtGui.QLabel("Message:"),1,0)
-        self.message_line_edit = QtGui.QLineEdit(self.message_data_dict.receiver + "分,処理しました")
+        self.message_line_edit = QtGui.QLineEdit(message_data_dict.receiver.encode("utf-8") + "分,処理しました")
         layout.addWidget(self.message_line_edit,1,1,1,2)
 
         # Sendボタン
