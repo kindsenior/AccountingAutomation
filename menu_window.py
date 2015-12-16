@@ -30,6 +30,8 @@ class MainWindow(QtGui.QWidget):
         # self.radio = QtGui.QRadioButton('radioButton')
         # self.layout.addWidget(self.radio)
 
+        self.__selection_list_dict = None
+
         self.check_boxes = []
         for message_data_dict in self.message_data_dict_list:
             hlayout = QtGui.QHBoxLayout()
@@ -77,6 +79,24 @@ class MainWindow(QtGui.QWidget):
     def setSignals(self):
         self.process_button.clicked.connect(self.process_accounting)
 
+    def selection_list_dict(self):
+        if self.__selection_list_dict == None:
+            print "now getting selection list feed..."
+            selection_list_feed = self.spreadsheet_manager.spreadsheet_client.get_list_feed( self.spreadsheet_manager.file_id, self.spreadsheet_manager.selection_list_sheet.get_worksheet_id() )
+            self.__selection_list_dict = {}
+            self.__selection_list_dict["company"] = []
+            self.__selection_list_dict["robot"] = []
+            self.__selection_list_dict["budget"] = []
+            self.__selection_list_dict["person"] = []
+            self.__selection_list_dict["state"] = []
+            for i,entry in enumerate(selection_list_feed.entry[1:]):
+                if entry.to_dict()["company"] != None: self.__selection_list_dict["company"].append(entry.to_dict()["company"])
+                if entry.to_dict()["robot"] != None: self.__selection_list_dict["robot"].append(entry.to_dict()["robot"])
+                if entry.to_dict()["budget"] != None: self.__selection_list_dict["budget"].append(entry.to_dict()["budget"])
+                if entry.to_dict()["person"] != None: self.__selection_list_dict["person"].append(entry.to_dict()["person"])
+                if entry.to_dict()["state"] != None: self.__selection_list_dict["state"].append(entry.to_dict()["state"])
+        return self.__selection_list_dict
+
     def process_accounting(self):
         for i in range( len(self.check_boxes) ):
             if self.check_boxes[i].isChecked():
@@ -85,7 +105,7 @@ class MainWindow(QtGui.QWidget):
                 self.message_data_dict_list[i].set_values()
 
                 # 注文データ入力ウィンドウ
-                self.order_data_input_window = OrderDataInputWindow( self.message_data_dict_list[i] )
+                self.order_data_input_window = OrderDataInputWindow( self.message_data_dict_list[i], self.selection_list_dict() )
                 # self.order_data_input_window.closeEvent = lambda event: self.order_data_input_window_close_cb(i)
                 self.order_data_input_window.send_order_data_button.clicked.connect( functools.partial(self.order_data_input_window_send_data_button_cb,i) )
                 self.order_data_input_window.exec_()# wait for sub window to close
@@ -151,7 +171,7 @@ class MainWindow(QtGui.QWidget):
 
 class OrderDataInputWindow(QtGui.QDialog):
 
-    def __init__(self, message_data_dict, parent=None):
+    def __init__(self, message_data_dict, selection_list_dict, parent=None):
         super(OrderDataInputWindow, self).__init__(parent)
 
         self.message_data_dict = message_data_dict
@@ -176,9 +196,14 @@ class OrderDataInputWindow(QtGui.QDialog):
         # ラインエディット
 
         self.form_dict = {}
-        
+
+        person_data = self.message_data_dict["person"]
+        person_list = selection_list_dict["person"]
+        if not person_data in person_list: person_list.append(person_data)
         self.layout.addWidget(QtGui.QLabel("person:"),0,0)
-        self.form_dict["person"] = QtGui.QLineEdit(self.message_data_dict["person"])
+        self.form_dict["person"] = QtGui.QComboBox()
+        self.form_dict["person"].addItems(selection_list_dict["person"])
+        self.form_dict["person"].setCurrentIndex(person_list.index(person_data))
         self.layout.addWidget(self.form_dict["person"],0,1)
 
         self.layout.addWidget(QtGui.QLabel("orderdate:"),1,0)
@@ -201,24 +226,28 @@ class OrderDataInputWindow(QtGui.QDialog):
         self.form_dict["merchandise"] = QtGui.QLineEdit("品名")
         self.layout.addWidget(self.form_dict["merchandise"],5,1)
 
-        # コンボボックス
         self.layout.addWidget(QtGui.QLabel("robot:"),6,0)
         self.form_dict["robot"] = QtGui.QComboBox()
-        self.form_dict["robot"].addItems(["JAXON","HRP2"])
+        self.form_dict["robot"].addItems(selection_list_dict["robot"])
         self.layout.addWidget(self.form_dict["robot"],6,1)
 
         self.layout.addWidget(QtGui.QLabel("budget:"),7,0)
         self.form_dict["budget"] = QtGui.QComboBox()
-        self.form_dict["budget"].addItems(['D-NEDO', 'N-NEDO', 'C'])
+        self.form_dict["budget"].addItems(selection_list_dict["budget"])
         self.layout.addWidget(self.form_dict["budget"],7,1)
+
+        self.layout.addWidget(QtGui.QLabel("state:"),8,0)
+        self.form_dict["state"] = QtGui.QComboBox()
+        self.form_dict["state"].addItems(selection_list_dict["state"])
+        self.layout.addWidget(self.form_dict["state"],8,1)
 
         # Sendボタン
         self.send_order_data_button = QtGui.QPushButton('Send to Spreadsheet')
-        self.layout.addWidget(self.send_order_data_button,8,0)
+        self.layout.addWidget(self.send_order_data_button,9,0)
 
         # cancelボタン
         cancel_button = QtGui.QPushButton('Cancel')
-        self.layout.addWidget(cancel_button,8,1)
+        self.layout.addWidget(cancel_button,9,1)
         cancel_button.clicked.connect(self.close)
 
         # # スピンボックス

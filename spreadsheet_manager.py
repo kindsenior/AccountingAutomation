@@ -34,9 +34,8 @@ class SpreadsheetManager():
 
         print "now getting sheets..."
         self.sheets = self.spreadsheet_client.get_worksheets(self.file_id)
-        self.order_list_sheet = self.sheets.entry[0]
-        # print "now getting list feed..."
-        # list_feed = self.spreadsheet_client.get_list_feed( self.file_id, self.order_list_sheet.get_worksheet_id() )
+        self.order_list_sheet = filter(lambda entry: entry.title.text == u'注文リスト', self.sheets.entry)[0]
+        self.selection_list_sheet = filter(lambda entry: entry.title.text == u'選択肢一覧', self.sheets.entry)[0]
 
         # 一行目のデータとそのインデクスの取得
         self.key_index_dict = {}
