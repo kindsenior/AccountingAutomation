@@ -79,16 +79,10 @@ class MainWindow(QtGui.QWidget):
             hlayout.addWidget(check)
             self.check_boxes.append(check)
 
-            # # ラインエディット
-            # line_edit = QtGui.QLineEdit(row_data.receiver)
-            # hlayout.addWidget(line_edit)
-
             # 見積書閲覧ボタン
             estimate_sheet_button = QtGui.QPushButton('View Estimate')
             estimate_sheet_button.clicked.connect( functools.partial(message_data_dict.open_estimate) )
             hlayout.addWidget(estimate_sheet_button)
-            
-            # row_data.get_estimate()
 
         # # スピンボックス
         # self.spin = QtGui.QSpinBox()
@@ -111,10 +105,6 @@ class MainWindow(QtGui.QWidget):
         # UI要素にシグナルを追加
         self.setSignals()
 
-    #----------------------------------------
-    ## UI要素にシグナルを追加
-    def setSignals(self):
-        self.process_button.clicked.connect(self.process_accounting)
 
     def selection_list_dict(self):
         if self.__selection_list_dict == None:
