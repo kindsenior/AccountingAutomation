@@ -84,26 +84,6 @@ class MainWindow(QtGui.QWidget):
             estimate_sheet_button.clicked.connect( functools.partial(message_data_dict.open_estimate) )
             hlayout.addWidget(estimate_sheet_button)
 
-        # # スピンボックス
-        # self.spin = QtGui.QSpinBox()
-        # self.layout.addWidget(self.spin)
- 
-        # # コンボボックス
-        # self.combo = QtGui.QComboBox()
-        # self.combo.addItems(['A', 'B', 'C'])
-        # self.layout.addWidget(self.combo)
- 
-        # # リストウィジェット
-        # self.listWidget = QtGui.QListWidget()
-        # self.listWidget.addItems(['itemA', 'itemB', 'itemC'])
-        # self.layout.addWidget(self.listWidget)
- 
-        # 最後にOKボタン
-        self.process_button = QtGui.QPushButton('Process Accouting')
-        self.layout.addWidget(self.process_button)
- 
-        # UI要素にシグナルを追加
-        self.setSignals()
 
 
     def selection_list_dict(self):
