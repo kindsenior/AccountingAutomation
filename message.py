@@ -8,7 +8,7 @@ from google_api_manager import *
 
 class MessageDataDictList(list):
 
-    def __init__(self,keys,parent=None):
+    def __init__(self,keys,page_token,parent=None):
         # super(RowDataList, self).__init__(parent)
         list.__init__(self)
         print "MessageDataList init"
@@ -20,7 +20,9 @@ class MessageDataDictList(list):
         # 添付ファイルのあるメッセージのみ抽出
         # threads = service.users().threads().list(userId="me",maxResults=10,q="from:urikake2@misumi.co.jp").execute().get("threads",[])
         print "now getting messages..."
-        messages = self.service.users().messages().list(userId="me",maxResults=10,q="from:urikake2@misumi.co.jp has:attachment").execute()["messages"]
+        message_list_feed = self.service.users().messages().list(userId="me",maxResults=10,pageToken=page_token,q="from:urikake2@misumi.co.jp has:attachment").execute()
+        self.next_page_token = message_list_feed["nextPageToken"]
+        messages = message_list_feed["messages"]
         for i in range( len(messages) ):
             message_data_dict = MessageDataDict( messages[i], self.service,keys )
             self.append(message_data_dict)

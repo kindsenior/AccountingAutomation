@@ -20,22 +20,59 @@ class MainWindow(QtGui.QWidget):
         super(MainWindow, self).__init__(parent)
 
         self.spreadsheet_manager = SpreadsheetManager()
-        self.message_data_dict_list = MessageDataDictList(self.spreadsheet_manager.key_index_dict.keys())
 
         # 空の縦レイアウトを作る
         self.layout = QtGui.QVBoxLayout()
         self.setLayout(self.layout)
-        
+
+        self.list_layout = QtGui.QVBoxLayout()
+        self.layout.addLayout(self.list_layout)
+
+        self.token_list = [None]
+        self.update_list(None)
+
         # # ラジオボタン
         # self.radio = QtGui.QRadioButton('radioButton')
         # self.layout.addWidget(self.radio)
 
         self.__selection_list_dict = None
 
+        # 実行ボタン
+        self.process_button = QtGui.QPushButton('Process Accouting')
+        self.layout.addWidget(self.process_button)
+        self.process_button.clicked.connect(self.process_accounting)
+
+    def prev_button_cb(self):
+        if len(self.token_list) > 1: self.token_list.pop()
+        self.update_list(self.token_list[0])
+
+    def next_button_cb(self):
+        self.token_list.append(self.next_page_token)
+        self.update_list(self.next_page_token)
+
+    def update_list(self,page_token):
+        self.message_data_dict_list = MessageDataDictList(self.spreadsheet_manager.key_index_dict.keys(),page_token)
+        self.next_page_token = self.message_data_dict_list.next_page_token
+
+        for child_layout in self.list_layout.children():
+            # child_layout.removeItem(child_layout)
+            for i in range(child_layout.count()):
+                child_layout.itemAt(i).widget().deleteLater()
+
+        hlayout = QtGui.QHBoxLayout()
+        self.list_layout.addLayout(hlayout)
+        self.prev_button = QtGui.QPushButton('Previous 10 messages')
+        hlayout.addWidget(self.prev_button)
+        self.prev_button.clicked.connect(self.prev_button_cb)
+
+        self.next_button = QtGui.QPushButton('Next 10 messages')
+        hlayout.addWidget(self.next_button)
+        self.next_button.clicked.connect(self.next_button_cb)
+
         self.check_boxes = []
         for message_data_dict in self.message_data_dict_list:
             hlayout = QtGui.QHBoxLayout()
-            self.layout.addLayout(hlayout)
+            self.list_layout.addLayout(hlayout)
 
             # チェックボックス
             check = QtGui.QCheckBox(message_data_dict.receiver + " " + message_data_dict.receive_date)
