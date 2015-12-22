@@ -153,27 +153,27 @@ class MainWindow(QtGui.QWidget):
 
     #----------------------------------------
     ## UI要素のステータスやら値やらプリントする
-    def getValue(self):
-        print '\n'
-        print ' getValue '.center(80, '*')
-        print '\n'
+    # def getValue(self):
+    #     print '\n'
+    #     print ' getValue '.center(80, '*')
+    #     print '\n'
  
-        print 'RadioButton State = ', self.radio.isChecked()
-        print 'CheckBox State    = ', self.check.isChecked()
-        print 'LineEdit Text     = ', self.lineEdit.text()
-        print 'SpinBox Value     = ', self.spin.value()
-        print 'ComboBox Index    = ', self.combo.currentIndex()
-        print 'ComboBox Label    = ', self.combo.currentText()
+    #     print 'RadioButton State = ', self.radio.isChecked()
+    #     print 'CheckBox State    = ', self.check.isChecked()
+    #     print 'LineEdit Text     = ', self.lineEdit.text()
+    #     print 'SpinBox Value     = ', self.spin.value()
+    #     print 'ComboBox Index    = ', self.combo.currentIndex()
+    #     print 'ComboBox Label    = ', self.combo.currentText()
  
-        currentListIndex = self.listWidget.currentRow()
-        print 'ListWidget index  = ', currentListIndex
-        if currentListIndex == -1:
-            print 'ListWidget Text   = None'
-        else:
-            print 'ListWidget Text   = ', self.listWidget.currentItem().text()
+    #     currentListIndex = self.listWidget.currentRow()
+    #     print 'ListWidget index  = ', currentListIndex
+    #     if currentListIndex == -1:
+    #         print 'ListWidget Text   = None'
+    #     else:
+    #         print 'ListWidget Text   = ', self.listWidget.currentItem().text()
  
-        print '\n'
-        print ' getValue '.center(80, '*')
+    #     print '\n'
+    #     print ' getValue '.center(80, '*')
 
 
 class OrderDataInputWindow(QtGui.QDialog):
