@@ -124,7 +124,7 @@ class MessageDataDict(dict):
     def print_pdf(self,pdfname):
         basename = os.path.splitext(pdfname)[0]
         os.system("pdftoppm -upw 160398 " + pdfname + " " + basename)
-        os.system("lp " + basename + "-1.ppm -o page-left=-20")
+        os.system("lp " + basename + "-*.ppm -o page-left=-20")
 
     def print_attachments(self):
         for create_func,path_func in [ (self.create_estimate,self.estimate_path), (self.create_invoice,self.invoice_path), (self.create_bill,self.bill_path) ]:
