@@ -280,7 +280,7 @@ class SendMailWindow(QtGui.QDialog):
         layout.addWidget(QtGui.QLabel("@jsk.imi.i.u-tokyo.ac.jp"),0,2)
 
         layout.addWidget(QtGui.QLabel("Message:"),1,0)
-        self.message_line_edit = QtGui.QLineEdit(message_data_dict.receiver.encode("utf-8") + "分,処理しました")
+        self.message_line_edit = QtGui.QLineEdit(message_data_dict.receiver.encode("utf-8") + "分,処理しました(このメールは自動送信です)")
         layout.addWidget(self.message_line_edit,1,1,1,2)
 
         # Sendボタン
