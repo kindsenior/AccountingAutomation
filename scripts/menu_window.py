@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
- 
+
 import os
 import sys
 import base64
 import functools
- 
+
 from PySide import QtCore, QtGui
 
 from spreadsheet_manager import *
@@ -15,7 +15,7 @@ import mail
 #------------------------------------------------------------------------------
 ## MainWindowを作るクラス
 class MainWindow(QtGui.QWidget):
-  
+
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
 
@@ -117,15 +117,15 @@ class MainWindow(QtGui.QWidget):
                 self.order_data_input_window.send_order_data_button.clicked.connect( functools.partial(self.order_data_input_window_send_data_button_cb,i) )
                 self.order_data_input_window.exec_()# wait for sub window to close
 
-                # メール送信ウィンドウ
-                self.send_mail_window = SendMailWindow( self.message_data_dict_list[i] )
-                self.send_mail_window.send_mail_button.clicked.connect( functools.partial(self.send_mail_window_send_mail_button_cb,self.message_data_dict_list[i]) )
-                self.send_mail_window.exec_()
-
                 # 印刷ウィンドウ
                 self.print_window = PrintWindow()
                 self.print_window.print_button.clicked.connect( functools.partial(self.message_data_dict_list[i].print_attachments) )
                 self.print_window.exec_()
+
+                # メール送信ウィンドウ
+                self.send_mail_window = SendMailWindow( self.message_data_dict_list[i] )
+                self.send_mail_window.send_mail_button.clicked.connect( functools.partial(self.send_mail_window_send_mail_button_cb,self.message_data_dict_list[i]) )
+                self.send_mail_window.exec_()
 
     def order_data_input_window_send_data_button_cb(self, check_box_idx):
         print "order_data_input_window_send_data_button_cb(" + str(check_box_idx) + ")"
@@ -157,21 +157,21 @@ class MainWindow(QtGui.QWidget):
     #     print '\n'
     #     print ' getValue '.center(80, '*')
     #     print '\n'
- 
+
     #     print 'RadioButton State = ', self.radio.isChecked()
     #     print 'CheckBox State    = ', self.check.isChecked()
     #     print 'LineEdit Text     = ', self.lineEdit.text()
     #     print 'SpinBox Value     = ', self.spin.value()
     #     print 'ComboBox Index    = ', self.combo.currentIndex()
     #     print 'ComboBox Label    = ', self.combo.currentText()
- 
+
     #     currentListIndex = self.listWidget.currentRow()
     #     print 'ListWidget index  = ', currentListIndex
     #     if currentListIndex == -1:
     #         print 'ListWidget Text   = None'
     #     else:
     #         print 'ListWidget Text   = ', self.listWidget.currentItem().text()
- 
+
     #     print '\n'
     #     print ' getValue '.center(80, '*')
 
@@ -184,13 +184,13 @@ class OrderDataInputWindow(QtGui.QDialog):
         # 空の縦レイアウトを作る
         self.layout = QtGui.QGridLayout()
         self.setLayout(self.layout)
-        
+
         # # ラジオボタン
         # self.radio = QtGui.QRadioButton('radioButton')
         # self.layout.addWidget(self.radio)
 
         # self.check_boxes = []
-        
+
         # for message_data in self.message_data_dict_list:
 
         # # チェックボックス
@@ -222,7 +222,7 @@ class OrderDataInputWindow(QtGui.QDialog):
         self.layout.addWidget(QtGui.QLabel("price:"),3,0)
         self.form_dict["price"] = QtGui.QLineEdit(message_data_dict["price"])
         self.layout.addWidget(self.form_dict["price"],3,1)
-        
+
         self.layout.addWidget(QtGui.QLabel("company:"),4,0)
         self.form_dict["company"] = QtGui.QLineEdit("株式会社 ミスミ")
         self.layout.addWidget(self.form_dict["company"],4,1)
@@ -258,13 +258,13 @@ class OrderDataInputWindow(QtGui.QDialog):
         # # スピンボックス
         # self.spin = QtGui.QSpinBox()
         # self.layout.addWidget(self.spin)
-  
+
         # # リストウィジェット
         # self.listWidget = QtGui.QListWidget()
         # self.listWidget.addItems(['itemA', 'itemB', 'itemC'])
         # self.layout.addWidget(self.listWidget)
 
-#------------------------------------------------------------------------------ 
+#------------------------------------------------------------------------------
 ## GUIの起動
 
 class SendMailWindow(QtGui.QDialog):
@@ -314,6 +314,6 @@ def main():
     ui = MainWindow()
     # ui.show()
     # sys.exit(app.exec_())
- 
+
 if __name__ == '__main__':
     main()
