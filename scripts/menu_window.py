@@ -276,6 +276,7 @@ class SendMailWindow(QtGui.QDialog):
 
         layout.addWidget(QtGui.QLabel("imi account:"),0,0)
         self.account_line_edit = QtGui.QLineEdit("")
+        self.account_line_edit.setFixedWidth(100)
         layout.addWidget(self.account_line_edit,0,1)
         layout.addWidget(QtGui.QLabel("@jsk.imi.i.u-tokyo.ac.jp"),0,2)
 
