@@ -141,7 +141,7 @@ class MainWindow(QtGui.QWidget):
         self.order_data_input_window.close()
 
     def send_mail_window_send_mail_button_cb(self, message_data_dict):
-        body = mail.create_body( message = self.send_mail_window.message_line_edit.text(),
+        body = mail.create_body( message = self.send_mail_window.message_text_edit.text(),
                                  subject = u'（株）ミスミより請求書発行のご案内',
                                  sender = self.send_mail_window.account_line_edit.text() + "@jsk.imi.i.u-tokyo.ac.jp",
                                  receiver = 'order-misumi@jsk.t.u-tokyo.ac.jp',
@@ -280,8 +280,14 @@ class SendMailWindow(QtGui.QDialog):
         layout.addWidget(QtGui.QLabel("@jsk.imi.i.u-tokyo.ac.jp"),0,2)
 
         layout.addWidget(QtGui.QLabel("Message:"),1,0)
-        self.message_line_edit = QtGui.QLineEdit(message_data_dict.receiver.encode("utf-8") + "分,処理しました(このメールは自動送信です)")
-        layout.addWidget(self.message_line_edit,1,1,1,2)
+        self.message_text_edit = QtGui.QTextEdit()
+        self.message_text_edit.setMinimumWidth(500)
+        self.message_text_edit.setText(message_data_dict.receiver.encode("utf-8") + "分,処理しました (このメールは自動送信です)\n\n"
+                                        + "なお,このシステムは\n"
+                                        + "git@github.com:kindsenior/accounting_automation.git\n"
+                                        + "から利用できます"
+                                        )
+        layout.addWidget(self.message_text_edit,1,1,1,2)
 
         # Sendボタン
         self.send_mail_button = QtGui.QPushButton('Send Mail')
