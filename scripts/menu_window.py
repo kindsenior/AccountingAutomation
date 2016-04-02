@@ -251,7 +251,7 @@ class OrderDataInputWindow(QtGui.QDialog):
         self.layout.addWidget(self.send_order_data_button,9,0)
 
         # cancelボタン
-        cancel_button = QtGui.QPushButton('Cancel')
+        cancel_button = QtGui.QPushButton("Next without posting to spreadsheet")
         self.layout.addWidget(cancel_button,9,1)
         cancel_button.clicked.connect(self.close)
 
@@ -294,7 +294,7 @@ class SendMailWindow(QtGui.QDialog):
         layout.addWidget(self.send_mail_button,2,0,1,2)
 
         # cancelボタン
-        cancel_button = QtGui.QPushButton("Don't Send")
+        cancel_button = QtGui.QPushButton("Next without sending mail")
         layout.addWidget(cancel_button,2,2)
         cancel_button.clicked.connect(self.close)
 
@@ -309,7 +309,7 @@ class PrintWindow(QtGui.QDialog):
         layout.addWidget(self.print_button)
         self.print_button.clicked.connect(self.close)
 
-        cancel_button = QtGui.QPushButton("Don't Print")
+        cancel_button = QtGui.QPushButton("Next without printing")
         layout.addWidget(cancel_button)
         cancel_button.clicked.connect(self.close)
 
