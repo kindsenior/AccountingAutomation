@@ -50,7 +50,7 @@ class MessageDataDict(dict):
         self.__attachment_paths = [None,None,None]
 
     def attachment_data(self,basename,idx):
-        print("MessageData.attachment_data(" + basename + " " + str(idx) + ")")
+        print("MessageDataDict.attachment_data(" + basename + " " + str(idx) + ")")
         if self.__attachments[idx] is None:
             for attachment_part in self.attachment_parts:
                 if attachment_part["filename"].encode("utf-8") == basename + ".pdf":
