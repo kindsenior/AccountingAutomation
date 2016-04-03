@@ -91,7 +91,7 @@ class MessageDataDict(dict):
         file_text = open(self.estimate_path().replace(".pdf",".txt")).read()
         self["price"] = re.findall("[,0-9]+\n",file_text)[4].replace("\n","")
 
-    def attachment_path(self,idx):
+    def attachment_path(self,idx): # path is "/tmp/<ID>御<見積書/請求書/納品書>.pdf"
         if self.__attachment_paths[idx] is None:
             self.__attachment_paths[idx] = os.path.join("/tmp", self.id + self.attachment_parts[idx]["filename"]).encode("utf-8")
         return self.__attachment_paths[idx]

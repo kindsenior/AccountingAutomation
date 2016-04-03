@@ -85,7 +85,7 @@ class MainWindow(QtGui.QWidget):
             hlayout.addWidget(estimate_sheet_button)
 
 
-
+    # 取引先,予算,担当者等選択肢の取得
     def selection_list_dict(self):
         if self.__selection_list_dict == None:
             print "now getting selection list feed..."
