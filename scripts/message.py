@@ -106,11 +106,19 @@ class MessageDataDict(dict):
         return self.attachment_path(2)
 
     def create_attachment(self,path_func,data_func):
-        if not os.path.exists(path_func()):
+        file_path = path_func()
+        if not os.path.exists(file_path):
+            print "create " + file_path
+
+            # create pdf
             file_data = base64.urlsafe_b64decode(data_func())
-            f = open(path_func(), 'w')
+            f = open(file_path, 'w')
             f.write(file_data)
             f.close()
+
+            # convert to ppm
+            basename = os.path.splitext(file_path)[0]
+            os.system("pdftoppm -upw 160398 " + file_path + " " + basename)
 
     def create_estimate(self):
         self.create_attachment(self.estimate_path,self.estimate_data)
@@ -123,8 +131,7 @@ class MessageDataDict(dict):
 
     def print_pdf(self,pdfname):
         basename = os.path.splitext(pdfname)[0]
-        os.system("pdftoppm -upw 160398 " + pdfname + " " + basename)
-        os.system("lp " + basename + "-*.ppm -o page-left=-20")
+        os.system("lp " + basename + "*.ppm -o page-left=-20")
 
     def print_attachments(self):
         for create_func,path_func in [ (self.create_estimate,self.estimate_path), (self.create_invoice,self.invoice_path), (self.create_bill,self.bill_path) ]:
@@ -133,4 +140,4 @@ class MessageDataDict(dict):
 
     def open_estimate(self):
         self.create_estimate()
-        os.system("gnome-open " + self.estimate_path())
+        os.system("gnome-open " + os.path.splitext(self.estimate_path())[0] + "*.ppm")
