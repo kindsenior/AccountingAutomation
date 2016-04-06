@@ -20,7 +20,7 @@ class MessageDataDictList(list):
         # 添付ファイルのあるメッセージのみ抽出
         # threads = service.users().threads().list(userId="me",maxResults=10,q="from:urikake2@misumi.co.jp").execute().get("threads",[])
         print "now getting messages..."
-        message_list_feed = self.service.users().messages().list(userId="me",maxResults=10,pageToken=page_token,q="from:urikake2@misumi.co.jp has:attachment").execute()
+        message_list_feed = self.service.users().messages().list(userId="me",maxResults=10,pageToken=page_token,q="from:urikake2@misumi.co.jp has:attachment subject:"+u"ミスミより請求書発行のご案内").execute()
         self.next_page_token = message_list_feed["nextPageToken"]
         messages = message_list_feed["messages"]
         for i in range( len(messages) ):
