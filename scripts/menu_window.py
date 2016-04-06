@@ -141,7 +141,7 @@ class MainWindow(QtGui.QWidget):
         self.order_data_input_window.close()
 
     def send_mail_window_send_mail_button_cb(self, message_data_dict):
-        body = mail.create_body( message = self.send_mail_window.message_text_edit.text(),
+        body = mail.create_body( message = self.send_mail_window.message_text_edit.toPlainText(),
                                  subject = u'（株）ミスミより請求書発行のご案内',
                                  sender = self.send_mail_window.account_line_edit.text() + "@jsk.imi.i.u-tokyo.ac.jp",
                                  receiver = 'order-misumi@jsk.t.u-tokyo.ac.jp',
