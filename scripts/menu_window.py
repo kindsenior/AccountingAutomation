@@ -286,7 +286,7 @@ class SendMailWindow(QtGui.QDialog):
         self.message_text_edit = QtGui.QTextEdit()
         self.message_text_edit.setMinimumWidth(500)
         self.message_text_edit.setText(message_data_dict.receiver.encode("utf-8") + "分,処理しました (このメールは自動送信です)\n"
-                                        + "(" + message_data_dict.receive_date.encode("utf-8") + "," + message_data_dict["price"] + "円" + ")\n\n"
+                                        + "(" + message_data_dict.receive_date.encode("utf-8") + ", " + message_data_dict["price"].encode("utf-8") + "円" + ")\n\n"
                                         + "なお,このシステムは\n"
                                         + "git@github.com:kindsenior/accounting_automation.git\n"
                                         + "から利用できます"
