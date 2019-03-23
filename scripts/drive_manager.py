@@ -76,4 +76,4 @@ class DriveManager():
                 logger.info('uploaded pdf: '+pdf_name+' as '+upload_name+'('+file_ids[-1]+')')
                 os.remove(pdf_name) # remove uploaded pdf files
                 logger.debug('remove pdf: '+pdf_name)
-            data['driveid'] = '={'+','.join(file_ids)+'}'
+            data['drivelink'] = '={'+','.join(file_ids)+'}'
