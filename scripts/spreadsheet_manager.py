@@ -23,14 +23,13 @@ def convert_to_unicode(val):
     return val
 
 class SpreadsheetManager():
-
-    def __init__(self,parent=None):
+    def __init__(self, parent=None):
         # super(RowDataList, self).__init__(parent)
         # list.__init__(self)
         print "SpreadsheetManager init"
 
         self.file_id = "1QqN7rT0gv2eDrmMDnfc_FXaXhSzZhB44TVICkKaj5DA"
-        
+
         self.credentials = get_credentials()
         # http = credentials.authorize(httplib2.Http())
         # service = discovery.build('drive', 'v2', http=http)
