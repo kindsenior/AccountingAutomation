@@ -67,6 +67,9 @@ class SpreadsheetManager():
             print "now updating :" + key
             self.spreadsheet_client.update( cell_entry )
 
-if __name__ == "__main__":
+def main():
     global spreadsheet_manager
     spreadsheet_manager = SpreadsheetManager()
+
+if __name__ == "__main__":
+    main()
