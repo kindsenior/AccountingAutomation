@@ -4,6 +4,7 @@
 import sys
 import base64
 import re
+import chardet
 
 from apiclient import discovery
 import oauth2client
@@ -14,6 +15,10 @@ import gdata.spreadsheets.client
 
 from logger import *
 from google_api_manager import *
+
+def convert_to_unicode(val):
+    if not type(val) == unicode: val = val.decode(chardet.detect(val)['encoding'])
+    return val
 
 class SpreadsheetManager():
 
