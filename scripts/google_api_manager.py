@@ -17,7 +17,8 @@ except ImportError:
 
 # SCOPES = 'https://www.googleapis.com/auth/gmail.readonly'
 # SCOPES = 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/gmail.readonly'
-SCOPES = 'https://www.googleapis.com/auth/drive https://mail.google.com/'
+# SCOPES = 'https://www.googleapis.com/auth/drive https://mail.google.com/'
+SCOPES = 'https://www.googleapis.com/auth/drive https://mail.google.com/ https://www.googleapis.com/auth/spreadsheets'
 # SCOPES = 'https://www.googleapis.com/auth/drive'
 CLIENT_SECRET_FILE = os.path.join(os.path.dirname(__file__), 'client_secret.json')
 APPLICATION_NAME = 'Accouting Automation'
