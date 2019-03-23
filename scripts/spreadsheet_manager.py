@@ -12,6 +12,7 @@ from oauth2client import tools
 
 import gdata.spreadsheets.client
 
+from logger import *
 from google_api_manager import *
 
 class SpreadsheetManager():
